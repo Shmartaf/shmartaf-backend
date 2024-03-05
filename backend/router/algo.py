@@ -20,7 +20,8 @@ dal = DataAccessLayer()
 
 @router.get("/{user_id}")
 async def getBabysitterFromAlgo(user_id, skip: int = 0, limit: int = 1000) -> list[schemas.Recommendation]:
-    return await get_recommendations_for_parent(user_id).to_dict(orient="records")
+    response = get_recommendations_for_parent(user_id).to_dict(orient="records")
+    return response
 
 
 @router.get("/babysitter/{user_id}")
