@@ -49,9 +49,12 @@ def create_input_data_for_parent(parentid):
         except Exception:
             babysitter_data["Babysitter_Relevant_Skills_num"] = 0
         # Calculate the number of times this babysitter has been favorited
-        babysitter_data["Favorites_totalnum"] = sum(
-            1 for favorite in dal.get_all(models.Favorite) if favorite.babysitterid == babysitter.id
-        )
+        try:
+            babysitter_data["Favorites_totalnum"] = sum(
+                1 for favorite in dal.get_all(models.Favorite) if favorite.babysitterid == babysitter.id
+            )
+        except Exception:
+            babysitter_data["Favorites_totalnum"] = 0
 
         # Calculate the total number of reviews received by the babysitter
         babysitter_data["Babysitter_Total_Reviews_got"] = sum(

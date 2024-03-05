@@ -7,6 +7,11 @@ from backend.database.faker_db import (
     mock_needs_skills,
     schemas,
 )
+from backend.process_data_before_learning import (
+    load_data,
+    process_data_for_training,
+    train_model,
+)
 from backend.send_parent_id import get_recommendations_for_parent
 
 router = APIRouter(
@@ -20,6 +25,9 @@ dal = DataAccessLayer()
 
 @router.get("/{user_id}")
 async def getBabysitterFromAlgo(user_id, skip: int = 0, limit: int = 1000) -> list[schemas.Recommendation]:
+    parents, babysitters, favorites, reviews, contacted = load_data(dal)
+    df = process_data_for_training(parents, babysitters, favorites, reviews, contacted)
+    train_model(df)
     response = get_recommendations_for_parent(user_id).to_dict(orient="records")
     return response
 
