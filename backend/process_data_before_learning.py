@@ -34,24 +34,39 @@ def process_data_for_training(parents, babysitters, favorites, reviews, contacte
         for babysitter in babysitters:
             babysitter_data = {}
             babysitter_data["Babysitterid"] = babysitter.id
-            babysitter_data["Babysitter_Skills_Totalnum"] = len(babysitter.skills)
-            Childs_Needs_Totalnum = sum(len(children.needs) for children in parent.childrens)
+            try:
+                babysitter_data["Babysitter_Skills_Totalnum"] = len(babysitter.skills)
+            except Exception:
+                babysitter_data["Babysitter_Skills_Totalnum"] = 0
+            try:
+                Childs_Needs_Totalnum = sum(len(children.needs) for children in parent.childrens)
+            except Exception:
+                Childs_Needs_Totalnum = 0
             babysitter_data["Child_Needs_Totalnum"] = Childs_Needs_Totalnum
-            babysitter_needs_answers = [need.needid for skill in babysitter.skills for need in skill.skill.skill_needs]
-            Babysitter_Relevant_Skills_num = sum(
-                1 for child in parent.childrens for need in child.needs if need.needid in babysitter_needs_answers
-            )
-            babysitter_data["Babysitter_Relevant_Skills_num"] = Babysitter_Relevant_Skills_num
-            babysitter_data["Favorites_totalnum"] = sum(
-                1 for favorite in favorites if favorite.babysitterid == babysitter.id
-            )
-            babysitter_data["Babysitter_Total_Reviews_got"] = sum(
-                1 for review in reviews if review.reviewedid == babysitter.id
-            )
-            babysitter_data["Contacted"] = int(
-                (parent.id, babysitter.id) in {(contact.parentid, contact.babysitterid) for contact in contacted}
-            )
-
+            try:
+                babysitter_needs_answers = [
+                    need.needid for skill in babysitter.skills for need in skill.skill.skill_needs
+                ]
+                Babysitter_Relevant_Skills_num = sum(
+                    1 for child in parent.childrens for need in child.needs if need.needid in babysitter_needs_answers
+                )
+                babysitter_data["Babysitter_Relevant_Skills_num"] = Babysitter_Relevant_Skills_num
+                babysitter_data["Favorites_totalnum"] = sum(
+                    1 for favorite in favorites if favorite.babysitterid == babysitter.id
+                )
+            except Exception:
+                babysitter_data["Babysitter_Relevant_Skills_num"] = 0
+                babysitter_data["Favorites_totalnum"] = 0
+            try:
+                babysitter_data["Babysitter_Total_Reviews_got"] = sum(
+                    1 for review in reviews if review.reviewedid == babysitter.id
+                )
+                babysitter_data["Contacted"] = int(
+                    (parent.id, babysitter.id) in {(contact.parentid, contact.babysitterid) for contact in contacted}
+                )
+            except Exception:
+                babysitter_data["Babysitter_Total_Reviews_got"] = 0
+                babysitter_data["Contacted"] = 0
             data_for_training.append(babysitter_data)
 
     df = pd.DataFrame(data_for_training)
