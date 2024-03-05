@@ -14,9 +14,7 @@ class DataAccessLayer:
     def get(self, model, id: UUID4):
         try:
             result = self.db.query(model).filter(model.id == id).first()
-            self.logger.log(
-                message=f"Get {model.__name__} with id {id}", level="INFO", data=result
-            )
+            self.logger.log(message=f"Get {model.__name__} with id {id}", level="INFO", data=result)
             return result
         except Exception as e:
             self.logger.log(
@@ -30,9 +28,7 @@ class DataAccessLayer:
     def get_all(self, model, skip: int = 0, limit: int = 100):
         try:
             result = self.db.query(model).offset(skip).limit(limit).all()
-            self.logger.log(
-                message=f"Get all {model.__name__}", level="INFO", data=result
-            )
+            self.logger.log(message=f"Get all {model.__name__}", level="INFO", data=result)
             return result
         except Exception as e:
             self.logger.log(

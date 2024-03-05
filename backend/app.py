@@ -1,11 +1,11 @@
 import uvicorn
-from backend.database.database import Database
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
-from backend.router import algo, babysitter, certifications, parent, requirements, users
 
+from backend.database.database import Database
 from backend.database.models import Base
+from backend.router import algo, babysitter, certifications, parent, requirements, users
 
 app = FastAPI(
     debug=True,
