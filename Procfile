@@ -1,1 +1,1 @@
-web: poetry install && uvicorn backend.app:app --host=0.0.0.0
+web: poetry export -f requirements.txt --output requirements.txt && uvicorn backend.app:app --host=0.0.0.0
