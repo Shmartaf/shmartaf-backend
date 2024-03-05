@@ -24,22 +24,30 @@ def create_input_data_for_parent(parentid):
 
         # Add babysitter-specific features
         babysitter_data["Babysitterid"] = babysitter.id
-        babysitter_data["Babysitter_Skills_Totalnum"] = len(babysitter.skills)
+        babysitter_data["Babysitter_Skills_Totalnum"] = 0
 
-        # Calculate the total number of children's needs for the parent
-        Childs_Needs_Totalnum = sum(len(child.needs) for child in parent.childrens)
+        try:
+            babysitter_data["Babysitter_Skills_Totalnum"] = len(babysitter.skills)
+            # Calculate the total number of children's needs for the parent
+            Childs_Needs_Totalnum = sum(len(child.needs) for child in parent.childrens)
+        except Exception:
+            Childs_Needs_Totalnum = 0
         babysitter_data["Child_Needs_Totalnum"] = Childs_Needs_Totalnum
 
         # Calculate how many of the babysitter's skills match the children's needs
         Babysitter_Relevant_Skills_num = 0
-        babysitter_needs_answers = [need.needid for skill in babysitter.skills for need in skill.skill.skill_needs]
-        for child in parent.childrens:
-            for need in child.needs:
-                if need.needid in babysitter_needs_answers:
-                    Babysitter_Relevant_Skills_num += 1
-
-        babysitter_data["Babysitter_Relevant_Skills_num"] = Babysitter_Relevant_Skills_num
-
+        try:
+            babysitter_needs_answers = [need.needid for skill in babysitter.skills for need in skill.skill.skill_needs]
+            try:
+                for child in parent.childrens:
+                    for need in child.needs:
+                        if need.needid in babysitter_needs_answers:
+                            Babysitter_Relevant_Skills_num += 1
+            except Exception:
+                pass
+            babysitter_data["Babysitter_Relevant_Skills_num"] = Babysitter_Relevant_Skills_num
+        except Exception:
+            babysitter_data["Babysitter_Relevant_Skills_num"] = 0
         # Calculate the number of times this babysitter has been favorited
         babysitter_data["Favorites_totalnum"] = sum(
             1 for favorite in dal.get_all(models.Favorite) if favorite.babysitterid == babysitter.id

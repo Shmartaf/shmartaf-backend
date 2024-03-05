@@ -243,3 +243,6 @@ def mock_contacted():
                     dal.db.rollback()
                     pass
     print("Contacted mock data generation complete.")
+
+
+mock_db(2)
