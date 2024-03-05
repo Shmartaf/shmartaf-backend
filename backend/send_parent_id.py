@@ -8,6 +8,11 @@ dal = DataAccessLayer()
 # Load the trained Naive Bayes model
 model_path = "naive_bayes_model.joblib"
 nb_model = joblib.load(model_path)
+parents = dal.get_all(models.Parent)
+babysitters = dal.get_all(models.Babysitter)
+favorites = dal.get_all(models.Favorite)
+reviews = dal.get_all(models.Review)
+contacted = dal.get_all(models.Contacted)
 
 
 def create_input_data_for_parent(parentid):
@@ -16,7 +21,6 @@ def create_input_data_for_parent(parentid):
 
     # Assuming these functions fetch data for the specified parent and all babysitters
     parent = dal.get(models.Parent, parentid)
-    babysitters = dal.get_all(models.Babysitter)
 
     # Loop through each babysitter to create a feature set
     for babysitter in babysitters:
@@ -51,14 +55,14 @@ def create_input_data_for_parent(parentid):
         # Calculate the number of times this babysitter has been favorited
         try:
             babysitter_data["Favorites_totalnum"] = sum(
-                1 for favorite in dal.get_all(models.Favorite) if favorite.babysitterid == babysitter.id
+                1 for favorite in favorites if favorite.babysitterid == babysitter.id
             )
         except Exception:
             babysitter_data["Favorites_totalnum"] = 0
 
         # Calculate the total number of reviews received by the babysitter
         babysitter_data["Babysitter_Total_Reviews_got"] = sum(
-            1 for review in dal.get_all(models.Review) if review.reviewedid == babysitter.id
+            1 for review in reviews if review.reviewedid == babysitter.id
         )
 
         # Append the babysitter data to the list
