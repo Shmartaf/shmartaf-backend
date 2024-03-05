@@ -7,10 +7,10 @@ from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-# SQLALCHEMY_DATABASE_URL = (
-#     f'postgresql://{os.getenv("PGUSER")}:{os.getenv("PGPASSWORD")}@{os.getenv("PGHOST")}:5432/{os.getenv("PGDATABASE")}'
-# )
-SQLALCHEMY_DATABASE_URL = f'postgresql://postgres.dstkujmlmzynreehsvls:{os.getenv("PGPASSWORD")}@aws-0-eu-central-1.pooler.supabase.com:5432/postgres'
+SQLALCHEMY_DATABASE_URL = (
+    f'postgresql://{os.getenv("PGUSER")}:{os.getenv("PGPASSWORD")}@{os.getenv("PGHOST")}:5432/{os.getenv("PGDATABASE")}'
+)
+# SQLALCHEMY_DATABASE_URL = f'postgresql://postgres.dstkujmlmzynreehsvls:{os.getenv("PGPASSWORD")}@aws-0-eu-central-1.pooler.supabase.com:5432/postgres'
 
 
 class Database:
