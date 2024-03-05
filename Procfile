@@ -1,1 +1,1 @@
-web: uvicorn backend.app:app
+web: uvicorn backend.app:app --port=${PORT}
