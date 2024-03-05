@@ -1,7 +1,12 @@
 from fastapi import APIRouter
 
-from backend.database import mock_contacted, mock_db, mock_needs_skills, schemas
 from backend.database.dal import DataAccessLayer
+from backend.database.faker_db import (
+    mock_contacted,
+    mock_db,
+    mock_needs_skills,
+    schemas,
+)
 from backend.send_parent_id import get_recommendations_for_parent
 
 router = APIRouter(
