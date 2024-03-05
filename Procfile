@@ -1,1 +1,1 @@
-web: uvicorn backend.app:app --host=0.0.0.0
+web: python -m backend.app
