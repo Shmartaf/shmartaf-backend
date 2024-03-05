@@ -12,6 +12,7 @@ from backend.database.dal import DataAccessLayer
 # Configure logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+dal = DataAccessLayer()
 
 
 def load_data(dal):
@@ -71,11 +72,3 @@ def train_model(df):
     print("Model Accuracy:", accuracy)
 
     joblib.dump(nb_model, "naive_bayes_model.joblib")
-
-
-if __name__ == "__main__":
-    dal = DataAccessLayer()
-    parents, babysitters, favorites, reviews, contacted = load_data(dal)
-    df = process_data_for_training(parents, babysitters, favorites, reviews, contacted)
-    print(df)
-    train_model(df)
