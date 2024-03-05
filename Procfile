@@ -1,1 +1,1 @@
-web: python -m backend.app
+web: uvicorn backend.app:app
