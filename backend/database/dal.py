@@ -13,6 +13,7 @@ class DataAccessLayer:
 
     def get(self, model, id: UUID4):
         try:
+            self.db = next(Database().get_db())
             result = self.db.query(model).filter(model.id == id).first()
             self.logger.log(message=f"Get {model.__name__} with id {id}", level="INFO", data=result)
             return result
@@ -27,6 +28,7 @@ class DataAccessLayer:
 
     def get_all(self, model, skip: int = 0, limit: int = 100):
         try:
+            self.db = next(Database().get_db())
             result = self.db.query(model).offset(skip).limit(limit).all()
             self.logger.log(message=f"Get all {model.__name__}", level="INFO", data=result)
             return result
@@ -41,6 +43,7 @@ class DataAccessLayer:
 
     def create(self, model, schema):
         try:
+            self.db = next(Database().get_db())
             db_model = model(**schema.dict())
             self.db.add(db_model)
             self.db.commit()
@@ -62,6 +65,7 @@ class DataAccessLayer:
 
     def update(self, model, id: int, schema):
         try:
+            self.db = next(Database().get_db())
             db_model = self.get(model, id)
             for var, value in schema.dict().items():
                 setattr(db_model, var, value)
@@ -84,6 +88,7 @@ class DataAccessLayer:
 
     def delete(self, model, id: int):
         try:
+            self.db = next(Database().get_db())
             db_model = self.get(model, id)
             self.db.delete(db_model)
             self.db.commit()
@@ -104,6 +109,7 @@ class DataAccessLayer:
 
     def aggregate(self, model, id: int, field: str):
         try:
+            self.db = next(Database().get_db())
             result = self.db.query(model).filter(getattr(model, field) == id).all()
             self.logger.log(
                 message=f"Get {model.__name__} with {field} {id}",
