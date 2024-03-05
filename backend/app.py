@@ -1,9 +1,9 @@
 import uvicorn
-from database.database import Database
+from backend.database.database import Database
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
-from router import algo, babysitter, certifications, parent, requirements, users
+from backend.router import algo, babysitter, certifications, parent, requirements, users
 
 from backend.database.models import Base
 
@@ -38,14 +38,14 @@ def main():
     return RedirectResponse(url="/docs")
 
 
-if __name__ == "__main__":
-    app.include_router(users.router)
-    app.include_router(babysitter.router)
-    app.include_router(parent.router)
-    app.include_router(requirements.router)
-    app.include_router(certifications.router)
-    app.include_router(algo.router)
+app.include_router(users.router)
+app.include_router(babysitter.router)
+app.include_router(parent.router)
+app.include_router(requirements.router)
+app.include_router(certifications.router)
+app.include_router(algo.router)
 
+if __name__ == "__main__":
     uvicorn.run(
         app,
         host="0.0.0.0",
