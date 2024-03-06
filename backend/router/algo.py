@@ -1,12 +1,8 @@
 from fastapi import APIRouter
 
+from backend.database import schemas
 from backend.database.dal import DataAccessLayer
-from backend.database.faker_db import (
-    mock_contacted,
-    mock_db,
-    mock_needs_skills,
-    schemas,
-)
+from backend.database.faker_db import mock_contacted, mock_db, mock_needs_skills
 from backend.process_data_before_learning import (
     load_data,
     process_data_for_training,
@@ -21,6 +17,14 @@ router = APIRouter(
 
 
 dal = DataAccessLayer()
+
+
+@router.get("/faker")
+def faker(amount: int = 100):
+    mock_db(amount)
+    mock_needs_skills()
+    mock_contacted()
+    return "faker complete successfully"
 
 
 @router.get("/{user_id}")
@@ -41,11 +45,3 @@ def getParentsFromAlgo(user_id, skip: int = 0, limit: int = 1000) -> list[schema
 @router.get("/train")
 def train():
     return "train"
-
-
-@router.get("/faker")
-def faker(amount: int = 100):
-    mock_db(amount)
-    mock_needs_skills()
-    mock_contacted()
-    return "faker complete successfully"

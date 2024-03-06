@@ -56,6 +56,8 @@ def create_skill():
 @retry_on_duplicate
 def create_need():
     need_schema = schemas.RequirementsSchema(id=uuid4(), needname=fake.word())
+    print(need_schema)
+    print("need schema create")
     return dal.create(model=SpecialNeed, schema=need_schema)
 
 
