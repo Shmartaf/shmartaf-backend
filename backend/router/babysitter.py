@@ -59,3 +59,25 @@ def create_certification(
     if dal.get(models.SpecialSkill, certification_id) is None:
         raise HTTPException(status_code=404, detail="Certification not found")
     return dal.create(models.BabysitterSkill, scheme)
+
+
+@router.post("/{babysitter_id}/reviews")
+def create_review(babysitter_id: UUID4, review: schemas.ReviewSchema):
+    review = dal.create(models.Review, review)
+    return review
+
+
+@router.get("/{babysitter_id}/reviews")
+def get_reviews(babysitter_id: UUID4) -> List[schemas.ReviewSchema]:
+    return dal.aggregate(models.Review, babysitter_id, "reviewedid")
+
+
+@router.delete("/{babysitter_id}/favorites/{parent_id}")
+def delete_favorite(babysitter_id: UUID4, parent_id: UUID4):
+    favorites = dal.aggregate(models.Favorite, babysitter_id, "babysitterid")
+    if not favorites:
+        raise HTTPException(status_code=404, detail="Favorite not found")
+    elif parent_id not in favorites:
+        raise HTTPException(status_code=404, detail="Parent not found")
+    favorite_id = favorites[parent_id]
+    return dal.delete(models.Favorite, favorite_id)

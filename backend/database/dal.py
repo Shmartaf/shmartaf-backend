@@ -86,7 +86,7 @@ class DataAccessLayer:
             self.db.rollback()
             return None
 
-    def delete(self, model, id: int):
+    def delete(self, model, id: UUID4):
         try:
             self.db = next(Database().get_db())
             db_model = self.get(model, id)
@@ -107,7 +107,7 @@ class DataAccessLayer:
             self.db.rollback()
             return None
 
-    def aggregate(self, model, id: int, field: str):
+    def aggregate(self, model, id: UUID4, field: str):
         try:
             self.db = next(Database().get_db())
             result = self.db.query(model).filter(getattr(model, field) == id).all()

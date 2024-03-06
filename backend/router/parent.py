@@ -71,6 +71,17 @@ def create_favorite(parent_id: UUID4, favorite: schemas.FavoriteRequestSchema):
     return dal.create(models.Favorite, favorite)
 
 
+@router.delete("/{parent_id}/favorites/{babysitter_id}")
+def delete_favorite(parent_id: UUID4, babysitter_id: UUID4):
+    favorites = dal.aggregate(model=models.Favorite, id=parent_id, field="parentid")
+    if not favorites:
+        raise HTTPException(status_code=404, detail="Favorite not found")
+    elif babysitter_id not in favorites:
+        raise HTTPException(status_code=404, detail="Babysitter not found")
+    favorite_id = favorites[babysitter_id]
+    return dal.delete(models.Favorite, favorite_id)
+
+
 @router.post("/{parent_id}/requirements/{child_id}/{requirements.id}")
 def create_requirements(parent_id: UUID4, child_id: UUID4, requirements_id: UUID4, needrank: int):
     get_req = dal.get(models.SpecialNeed, requirements_id)
@@ -82,3 +93,13 @@ def create_requirements(parent_id: UUID4, child_id: UUID4, requirements_id: UUID
         needrank=needrank,
     )
     return dal.create(model=models.ChildrensNeeds, schema=schema)
+
+
+@router.get("/{parent_id}/reviews")
+def get_reviews(parent_id: UUID4):
+    return dal.aggregate(model=models.Review, id=parent_id, field="reviewedid")
+
+
+@router.post("/{parent_id}/reviews")
+def create_review(parent_id: UUID4, review: schemas.ReviewSchema):
+    return dal.create(models.Review, review)
