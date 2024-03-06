@@ -177,5 +177,6 @@ class SignUpSchema(BaseModel):
 
 
 class Recommendation(BaseModel):
-    Babysitterid: UUID4
-    Likelihood: float
+    id: Optional[UUID4] = uuid4().hex
+    pictureid: int
+    description: str

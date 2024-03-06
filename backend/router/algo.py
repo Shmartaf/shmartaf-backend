@@ -29,6 +29,7 @@ async def getBabysitterFromAlgo(user_id, skip: int = 0, limit: int = 1000) -> li
     df = process_data_for_training(parents, babysitters, favorites, reviews, contacted)
     train_model(df)
     response = get_recommendations_for_parent(user_id)
+    print(response)
     return response
 
 
