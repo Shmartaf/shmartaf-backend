@@ -100,5 +100,8 @@ def get_recommendations_for_parent(parentid):
 
     # Sort the babysitters by likelihood of being contacted
     recommendations_sorted = recommendations.sort_values(by="Likelihood", ascending=False)
-
-    return recommendations_sorted
+    babysitters_results = []
+    for index, row in recommendations_sorted.iterrows():
+        babysitter = dal.get(models.Babysitter, row["Babysitterid"])
+        babysitters_results.append(babysitter)
+    return babysitters_results
