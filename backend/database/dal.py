@@ -1,5 +1,6 @@
 # from backend.database import models, schemas
 
+from fastapi import HTTPException
 from pydantic import UUID4
 
 from backend.database.database import Database
@@ -106,6 +107,28 @@ class DataAccessLayer:
             )
             self.db.rollback()
             return None
+
+    def deleteTup(self, model, id_tuple: tuple):
+        try:
+            self.db = next(Database().get_db())
+            db_model = self.db.query(model).filter_by(parentid=id_tuple[0], babysitterid=id_tuple[1]).first()
+
+            self.db.delete(db_model)
+            self.db.commit()
+            self.logger.log(
+                message=f"Delete {model.__name__} with ids {id_tuple}",
+                level="INFO",
+                data=db_model,
+            )
+            return db_model
+        except Exception as e:
+            self.logger.log(
+                message=f"Delete {model.__name__} with ids {id_tuple} failed: {str(e)}",
+                level="ERROR",
+                data=str(e),
+            )
+            self.db.rollback()
+            raise HTTPException(status_code=500, detail="Internal Server Error")
 
     def aggregate(self, model, id: UUID4, field: str):
         try:

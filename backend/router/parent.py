@@ -74,12 +74,17 @@ def create_favorite(parent_id: UUID4, favorite: schemas.FavoriteRequestSchema):
 @router.delete("/{parent_id}/favorites/{babysitter_id}")
 def delete_favorite(parent_id: UUID4, babysitter_id: UUID4):
     favorites = dal.aggregate(model=models.Favorite, id=parent_id, field="parentid")
+    found = 0
+    for favorite in favorites:
+        if favorite.babysitterid == babysitter_id:
+            found = 1
     if not favorites:
         raise HTTPException(status_code=404, detail="Favorite not found")
-    elif babysitter_id not in favorites:
+    elif found == 0:
         raise HTTPException(status_code=404, detail="Babysitter not found")
-    favorite_id = favorites[babysitter_id]
-    return dal.delete(models.Favorite, favorite_id)
+
+    favorite_id = (str(parent_id), str(babysitter_id))
+    return dal.deleteTup(models.Favorite, favorite_id)
 
 
 @router.post("/{parent_id}/requirements/{child_id}/{requirements.id}")
