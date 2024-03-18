@@ -92,7 +92,7 @@ def create_requirements(parent_id: UUID4, child_id: UUID4, requirements_id: UUID
     get_req = dal.get(models.SpecialNeed, requirements_id)
     if get_req is None:
         raise HTTPException(status_code=404, detail="Requirements not found")
-    schema = schemas.ChildrenRequirementsSchema(
+    schema = schemas.ChildReqirmentsRequestSchema(
         needid=requirements_id,
         childid=child_id,
         needrank=needrank,
