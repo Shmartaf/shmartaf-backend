@@ -16,7 +16,7 @@ dal = DataAccessLayer()
 
 
 @router.get("/")
-def get_babysitters(skip: int = 0, limit: int = 10) -> List[schemas.BabysitterSchema]:
+def get_babysitters(skip: int = 0, limit: int = 10000) -> List[schemas.BabysitterSchema]:
     return dal.get_all(models.Babysitter, skip=skip, limit=limit)
 
 

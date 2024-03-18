@@ -14,7 +14,7 @@ dal = DataAccessLayer()
 
 
 @router.get("/")
-def get_parents(skip: int = 0, limit: int = 10) -> list[schemas.ParentResponseSchema]:
+def get_parents(skip: int = 0, limit: int = 100000) -> list[schemas.ParentResponseSchema]:
     return dal.get_all(models.Parent, skip=skip, limit=limit)
 
 
