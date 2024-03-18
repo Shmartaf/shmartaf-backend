@@ -81,7 +81,7 @@ class ScheduleSchema(BabysitterRequestSchema):
 class BabysitterSchema(BabysitterRequestSchema):
     user: UserSchema
     skills: Optional[list[BabysitterCertificationSchema]] = []
-    contacted_babysitters: Optional[list[ContactedRequestSchema]] = []
+    contacted: Optional[list[ContactedRequestSchema]] = []
     schedules: Optional[list[ScheduleSchema]] = []
 
 
