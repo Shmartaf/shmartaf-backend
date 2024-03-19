@@ -72,20 +72,34 @@ class BabysitterRequestSchema(BaseModel):
     description: str
 
 
-class ScheduleSchema(BabysitterRequestSchema):
-    date: date
+class ScheduleSchema(BaseModel):
+    babysitterid: UUID4
     starttime: time
     endtime: time
+    dayinweek: str
+
+
+class ReviewSchema(BaseModel):
+    id: Optional[UUID4] = uuid4().hex
+    reviewerid: UUID4
+    reviewedid: UUID4
+    rating: int
+    comment: str
+    flexibilityrating: int
+    reliabilityrating: int
+    interpersonalrating: int
+    registrationdate: date
 
 
 class BabysitterSchema(BabysitterRequestSchema):
     user: UserSchema
     skills: Optional[list[BabysitterCertificationSchema]] = []
     contacted: Optional[list[ContactedRequestSchema]] = []
-    schedules: Optional[list[ScheduleSchema]] = []
+    schedules: list[ScheduleSchema]
+    # reviews: Optional[list[ReviewSchema]] = []
 
 
-BabysitterSchema.update_forward_refs()
+# BabysitterSchema.update_forward_refs()
 
 
 class ChildrenResponseRequirementsSchema(ChildrenRequirementsSchema):
@@ -101,18 +115,6 @@ class ChildrenRequestSchema(BaseModel):
 
 class ChildrenSchema(ChildrenRequestSchema):
     needs: Optional[list[ChildrenResponseRequirementsSchema]] = []
-
-
-class ReviewSchema(BaseModel):
-    id: Optional[UUID4] = uuid4().hex
-    reviewerid: UUID4
-    reviewedid: UUID4
-    rating: int
-    comment: str
-    flexibilityrating: int
-    reliabilityrating: int
-    interpersonalrating: int
-    registrationdate: date
 
 
 class ParentSchema(BaseModel):

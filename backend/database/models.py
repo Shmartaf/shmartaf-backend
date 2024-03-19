@@ -40,6 +40,7 @@ class User(Base):
     userType = Column(String(255))
     parent = relationship("Parent", uselist=False, back_populates="user")
     babysitter = relationship("Babysitter", uselist=False, back_populates="user")
+    # reviews = relationship("Review", back_populates="reviewer")
 
 
 class Babysitter(Base):
@@ -63,6 +64,7 @@ class Babysitter(Base):
         order_by="Scheduler.dayinweek, Scheduler.starttime",
     )
     favorites = relationship("Favorite", back_populates="babysitter")
+    # reviews = relationship("Review", back_populates="reviewes")
 
 
 class Parent(Base):
@@ -106,6 +108,7 @@ class Review(Base):
     registrationdate = Column(Date)
     reviewer = relationship("User", foreign_keys=[reviewerid])
     reviewed = relationship("User", foreign_keys=[reviewedid])
+    # reviewes = relationship("Babysitter", back_populates="reviews")
 
 
 class SpecialNeed(Base):
